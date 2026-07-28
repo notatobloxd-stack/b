@@ -14,7 +14,6 @@ const lastUpdate = document.getElementById("lastUpdate");
 const homeLatInput =
     document.getElementById("homeLat");
 
-const japanMap = new JapanMap("japanMap");
 
 const homeLonInput =
     document.getElementById("homeLon");
