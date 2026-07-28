@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earthquake Monitor</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>🌍 Earthquake Monitor</h1>
+        <p>日本の最新地震情報</p>
+    </header>
+
+    <main>
+
+    <!-- 更新情報 -->
+    <section class="status">
+        <span>最終更新：</span>
+        <span id="lastUpdate">取得中...</span>
+    </section>
+
+    <div class="container">
+
+        <!-- 日本地図 -->
+        <div class="map-panel">
+            <canvas id="japanMap"></canvas>
+        </div>
+
+        <!-- 地震一覧 -->
+        <div class="list-panel">
+
+            <section class="latest">
+
+                <h2>最新の地震</h2>
+
+                <div id="earthquakeList">
+
+                    <div class="loading">
+                        地震情報を取得しています...
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+    <footer>
+        <p>Earthquake Monitor</p>
+    </footer>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
