@@ -42,9 +42,6 @@ class JapanMap {
         // 自宅
         this.home = null;
 
-        // 揺れ
-        this.waveRadius = 0;
-
         this.animationFrame = null;
 
         this.draw();
@@ -117,6 +114,43 @@ class JapanMap {
 
 }
 
+    drawPolygon(polygons) {
+
+    const ctx = this.ctx;
+
+    polygons.forEach(ring => {
+
+        ctx.beginPath();
+
+        ring.forEach((coord, index) => {
+
+            const p = this.latLonToCanvas(
+                coord[1],
+                coord[0]
+            );
+
+            if (index === 0) {
+
+                ctx.moveTo(p.x, p.y);
+
+            } else {
+
+                ctx.lineTo(p.x, p.y);
+
+            }
+
+        });
+
+        ctx.closePath();
+
+        ctx.fill();
+        ctx.stroke();
+
+    });
+
+}
+
+    
     kmToPixel(km) {
 
     /*
@@ -229,32 +263,7 @@ drawJapan() {
 
 }
 
-    drawEpicenter() {
-
-        if (!this.epicenter) return;
-
-        const pos = this.latLonToCanvas(
-            this.epicenter.lat,
-            this.epicenter.lon
-        );
-
-        const ctx = this.ctx;
-
-        ctx.fillStyle = "#ff3333";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            pos.x,
-            pos.y,
-            7,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-    }
+    
 
     drawHome() {
 
@@ -316,9 +325,6 @@ drawEpicenter() {
 
 }
 
-drawHome() {
-
-}
     
     drawWave() {
 
@@ -389,44 +395,5 @@ drawHome() {
         };
 
     }
-
-}
-
-const japanMap =
-    new JapanMap("japanMap");
-
-drawPolygon(polygons) {
-
-    const ctx = this.ctx;
-
-    polygons.forEach(ring => {
-
-        ctx.beginPath();
-
-        ring.forEach((coord, index) => {
-
-            const p = this.latLonToCanvas(
-                coord[1],
-                coord[0]
-            );
-
-            if (index === 0) {
-
-                ctx.moveTo(p.x, p.y);
-
-            } else {
-
-                ctx.lineTo(p.x, p.y);
-
-            }
-
-        });
-
-        ctx.closePath();
-
-        ctx.fill();
-        ctx.stroke();
-
-    });
 
 }
