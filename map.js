@@ -60,16 +60,18 @@ class JapanMap {
 
     }
 
-    setEpicenter(lat, lon) {
+    setEpicenter(lat, lon, quakeTime) {
 
-        this.epicenter = {
-            lat,
-            lon
-        };
+    this.epicenter = {
+        lat,
+        lon
+    };
 
-        this.draw();
+    this.quakeTime = new Date(quakeTime);
 
-    }
+    this.draw();
+
+}
 
     setHome(lat, lon) {
 
@@ -290,6 +292,27 @@ drawSWave() {
 }
 
 drawEpicenter() {
+
+    if (!this.epicenter) return;
+
+    const p = this.latLonToCanvas(
+        this.epicenter.lat,
+        this.epicenter.lon
+    );
+
+    const ctx = this.ctx;
+
+    // 外側の白い縁
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+
+    // 内側の赤い点
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = "#ff3030";
+    ctx.fill();
 
 }
 
