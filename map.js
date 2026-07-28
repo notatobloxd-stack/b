@@ -281,6 +281,22 @@ drawJapan() {
 
     }
 
+    drawPWave() {
+
+}
+
+drawSWave() {
+
+}
+
+drawEpicenter() {
+
+}
+
+drawHome() {
+
+}
+    
     drawWave() {
 
     if (!this.epicenter) return;
