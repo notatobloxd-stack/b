@@ -14,6 +14,8 @@ const lastUpdate = document.getElementById("lastUpdate");
 const homeLatInput =
     document.getElementById("homeLat");
 
+const japanMap = new JapanMap("japanMap");
+
 const homeLonInput =
     document.getElementById("homeLon");
 
@@ -208,6 +210,18 @@ if (savedHome && earthquakes.length > 0) {
         `;
 
     }
+
+}
+
+        if (earthquakes.length > 0) {
+
+    const latest = earthquakes[0];
+
+    japanMap.setEpicenter(
+        latest.latitude,
+        latest.longitude,
+        latest.time
+    );
 
 }
         
