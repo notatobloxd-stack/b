@@ -4,7 +4,6 @@
 ======================================
 Earthquake Monitor
 Leaflet Map
-Step 1
 ======================================
 */
 
@@ -16,10 +15,10 @@ class JapanMap {
             zoomControl: true
         });
 
-        // 日本全体を表示
+        // 日本全体
         this.map.setView([36.2048, 138.2529], 5);
 
-        // OpenStreetMap
+        // 地図
         L.tileLayer(
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             {
@@ -29,128 +28,168 @@ class JapanMap {
         ).addTo(this.map);
 
         this.homeMarker = null;
+        this.epicenterMarker = null;
 
-
+        // 地図クリックで自宅設定
         this.map.on("click", (e) => {
 
-    this.setHome(
-        e.latlng.lat,
-        e.latlng.lng
-    );
+            this.setHome(
+                e.latlng.lat,
+                e.latlng.lng
+            );
 
-            const saved =
-    localStorage.getItem("homeLocation");
+        });
 
-if (saved) {
+        // 保存済み自宅を読み込む
+        const saved =
+            localStorage.getItem("homeLocation");
 
-    const home =
-        JSON.parse(saved);
+        if (saved) {
 
-    this.setHome(
-        home.lat,
-        home.lon
-    );
+            const home =
+                JSON.parse(saved);
 
-}
-            
-});
+            this.setHome(
+                home.lat,
+                home.lon
+            );
 
-        setHome(lat, lon) {
-
-    // 古いマーカーを削除
-    if (this.homeMarker) {
-        this.map.removeLayer(this.homeMarker);
-    }
-
-    this.homeMarker = L.marker(
-        [lat, lon],
-        {
-            title: "自宅"
         }
-    ).addTo(this.map);
 
-    this.homeMarker.bindPopup("🏠 自宅").openPopup();
-
-    // 保存
-    localStorage.setItem(
-        "homeLocation",
-        JSON.stringify({
-            lat,
-            lon
-        })
-    );
-
-            const latInput =
-    document.getElementById("homeLat");
-
-const lonInput =
-    document.getElementById("homeLon");
-
-if (latInput && lonInput) {
-
-    latInput.value =
-        lat.toFixed(6);
-
-    lonInput.value =
-        lon.toFixed(6);
-
-}
-            
-}
-        
     }
+
+    /* ---------------------------
+       自宅設定
+    --------------------------- */
+
+    setHome(lat, lon) {
+
+        if (this.homeMarker) {
+
+            this.map.removeLayer(
+                this.homeMarker
+            );
+
+        }
+
+        this.homeMarker = L.marker(
+            [lat, lon]
+        ).addTo(this.map);
+
+        this.homeMarker.bindPopup(
+            "🏠 自宅"
+        );
+
+        localStorage.setItem(
+            "homeLocation",
+            JSON.stringify({
+                lat,
+                lon
+            })
+        );
+
+        const latInput =
+            document.getElementById("homeLat");
+
+        const lonInput =
+            document.getElementById("homeLon");
+
+        if (latInput) {
+
+            latInput.value =
+                lat.toFixed(6);
+
+        }
+
+        if (lonInput) {
+
+            lonInput.value =
+                lon.toFixed(6);
+
+        }
+
+    }
+
+    /* ---------------------------
+       震源表示
+    --------------------------- */
 
     setEpicenter(quake) {
 
-    // 前回のマーカーを削除
-    if (this.epicenterMarker) {
-        this.map.removeLayer(this.epicenterMarker);
+        if (
+            quake.latitude == null ||
+            quake.longitude == null
+        ) {
+
+            console.warn(
+                "緯度経度がありません",
+                quake
+            );
+
+            return;
+
+        }
+
+        if (this.epicenterMarker) {
+
+            this.map.removeLayer(
+                this.epicenterMarker
+            );
+
+        }
+
+        this.epicenterMarker =
+            L.marker([
+                quake.latitude,
+                quake.longitude
+            ]).addTo(this.map);
+
+        this.epicenterMarker.bindPopup(`
+            <b>${quake.hypocenter}</b><br>
+            M${quake.magnitude}<br>
+            深さ ${quake.depth} km<br>
+            最大震度 ${this.scaleToText(quake.maxScale)}<br>
+            ${quake.time}
+        `);
+
+        this.map.flyTo(
+            [
+                quake.latitude,
+                quake.longitude
+            ],
+            7,
+            {
+                duration: 1.5
+            }
+        );
+
     }
 
-    this.epicenterMarker = L.marker([
-        quake.latitude,
-        quake.longitude
-    ]).addTo(this.map);
+    /* ---------------------------
+       震度表示
+    --------------------------- */
 
-    this.epicenterMarker.bindPopup(`
-        <b>${quake.hypocenter}</b><br>
-        M${quake.magnitude}<br>
-        深さ ${quake.depth} km<br>
-        最大震度 ${this.scaleToText(quake.maxScale)}<br>
-        ${quake.time}
-    `);
+    scaleToText(scale) {
 
-    // 地震の場所へ移動
-    this.map.setView(
-        [quake.latitude, quake.longitude],
-        7,
-        {
-            animate: true,
-            duration: 1
-        }
-    );
+        const table = {
 
-}
+            10: "1",
+            20: "2",
+            30: "3",
+            40: "4",
+            45: "5弱",
+            50: "5強",
+            55: "6弱",
+            60: "6強",
+            70: "7"
 
-    scaleToText(scale){
+        };
 
-    const table = {
-        10:"1",
-        20:"2",
-        30:"3",
-        40:"4",
-        45:"5弱",
-        50:"5強",
-        55:"6弱",
-        60:"6強",
-        70:"7"
-    };
+        return table[scale] ?? "?";
 
-    return table[scale] ?? "?";
-
-}
-    
+    }
 
 }
 
-const japanMap = new JapanMap("japanMap");
+const japanMap =
+    new JapanMap("japanMap");
