@@ -59,10 +59,21 @@ let loading = false;
 
 async function init() {
 
-    const savedHome =
-    localStorage.getItem(
-        "homeLocation"
-    );
+    // 起動時に履歴を1回だけ取得
+    await loadEarthquakes();
+
+    // リアルタイム受信開始
+    const realtime = new EarthquakeRealtime();
+
+    realtime.onEarthquake((data) => {
+
+        handleRealtimeEarthquake(data);
+
+    });
+
+    realtime.connect();
+
+}
 
 if(savedHome){
 
@@ -77,16 +88,15 @@ if(savedHome){
     
     await loadEarthquakes();
 
-    setInterval(() => {
-        loadEarthquakes();
-    }, CONFIG.UPDATE_INTERVAL);
+    // 起動時に履歴を1回だけ取得
+await loadEarthquakes();
 
-    const realtime =
-    new EarthquakeRealtime();
+// リアルタイム受信
+const realtime = new EarthquakeRealtime();
 
-realtime.onEarthquake(quake=>{
+realtime.onEarthquake((data) => {
 
-    console.log(quake);
+    handleRealtimeEarthquake(data);
 
 });
 
@@ -558,5 +568,49 @@ function onNewEarthquake(quake) {
     console.log("新しい地震", quake);
 
     japanMap.setEpicenter(quake);
+
+}
+
+function handleRealtimeEarthquake(data) {
+
+    const q = data.earthquake;
+
+    const quake = {
+
+        id: data.id,
+
+        time: q.time,
+
+        hypocenter: q.hypocenter.name,
+
+        latitude: q.hypocenter.latitude,
+
+        longitude: q.hypocenter.longitude,
+
+        magnitude: q.hypocenter.magnitude,
+
+        depth: q.hypocenter.depth,
+
+        maxScale: q.maxScale,
+
+        tsunami: q.domesticTsunami
+
+    };
+
+    // 一番上に追加
+    earthquakes.unshift(quake);
+
+    // 最大件数を超えたら削除
+    earthquakes = earthquakes.slice(0, CONFIG.MAX_ITEMS);
+
+    // 地図更新
+    japanMap.setEpicenter(quake);
+
+    // 一覧更新
+    renderEarthquakes();
+
+    // 更新時刻
+    lastUpdate.textContent =
+        new Date().toLocaleString("ja-JP");
 
 }
