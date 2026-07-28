@@ -28,6 +28,76 @@ class JapanMap {
             }
         ).addTo(this.map);
 
+        this.homeMarker = null;
+
+
+        this.map.on("click", (e) => {
+
+    this.setHome(
+        e.latlng.lat,
+        e.latlng.lng
+    );
+
+            const saved =
+    localStorage.getItem("homeLocation");
+
+if (saved) {
+
+    const home =
+        JSON.parse(saved);
+
+    this.setHome(
+        home.lat,
+        home.lon
+    );
+
+}
+            
+});
+
+        setHome(lat, lon) {
+
+    // 古いマーカーを削除
+    if (this.homeMarker) {
+        this.map.removeLayer(this.homeMarker);
+    }
+
+    this.homeMarker = L.marker(
+        [lat, lon],
+        {
+            title: "自宅"
+        }
+    ).addTo(this.map);
+
+    this.homeMarker.bindPopup("🏠 自宅").openPopup();
+
+    // 保存
+    localStorage.setItem(
+        "homeLocation",
+        JSON.stringify({
+            lat,
+            lon
+        })
+    );
+
+            const latInput =
+    document.getElementById("homeLat");
+
+const lonInput =
+    document.getElementById("homeLon");
+
+if (latInput && lonInput) {
+
+    latInput.value =
+        lat.toFixed(6);
+
+    lonInput.value =
+        lon.toFixed(6);
+
+}
+            
+}
+        
     }
 
     setEpicenter(quake) {
