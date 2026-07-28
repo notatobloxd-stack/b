@@ -1,27 +1,30 @@
 "use strict";
 
+/*
+======================================
+Earthquake Monitor
+Leaflet Map
+Step 1
+======================================
+*/
+
 class JapanMap {
 
-    constructor(id){
+    constructor(id) {
 
         this.map = L.map(id, {
-
-            zoomControl:true,
-
-            attributionControl:true
-
+            zoomControl: true
         });
 
-        this.map.setView(
-            [36.2,138.2],
-            5
-        );
+        // 日本全体を表示
+        this.map.setView([36.2048, 138.2529], 5);
 
+        // OpenStreetMap
         L.tileLayer(
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             {
-                maxZoom:18,
-                attribution:"© OpenStreetMap contributors"
+                maxZoom: 18,
+                attribution: "© OpenStreetMap contributors"
             }
         ).addTo(this.map);
 
@@ -29,5 +32,4 @@ class JapanMap {
 
 }
 
-const japanMap =
-    new JapanMap("japanMap");
+const japanMap = new JapanMap("japanMap");
