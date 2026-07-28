@@ -52,6 +52,22 @@ let loading = false;
 
 async function init() {
 
+    const savedHome =
+    localStorage.getItem(
+        "homeLocation"
+    );
+
+if(savedHome){
+
+    const home=
+        JSON.parse(savedHome);
+
+    homeLatInput.value=home.lat;
+
+    homeLonInput.value=home.lon;
+
+}
+    
     await loadEarthquakes();
 
     setInterval(() => {
@@ -61,6 +77,11 @@ async function init() {
 }
 
 window.addEventListener("load", init);
+
+saveHomeButton.addEventListener(
+    "click",
+    saveHome
+);
 
 /* -----------------------------
    地震情報取得
@@ -414,5 +435,24 @@ function showArrival(result, quake) {
             <strong>約 ${result.sTime} 秒</strong>
         </div>
     `;
+
+}
+
+function saveHome(){
+
+    const home={
+
+        lat:Number(homeLatInput.value),
+
+        lon:Number(homeLonInput.value)
+
+    };
+
+    localStorage.setItem(
+        "homeLocation",
+        JSON.stringify(home)
+    );
+
+    alert("保存しました！");
 
 }
