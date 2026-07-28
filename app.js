@@ -81,6 +81,17 @@ if(savedHome){
         loadEarthquakes();
     }, CONFIG.UPDATE_INTERVAL);
 
+    const realtime =
+    new EarthquakeRealtime();
+
+realtime.onEarthquake(quake=>{
+
+    console.log(quake);
+
+});
+
+realtime.connect();
+    
 }
 
 window.addEventListener("load", init);
