@@ -24,6 +24,10 @@ const HOME = {
     lat: 34.8151,
     lon: 134.6853
 };
+
+const arrivalInfo =
+    document.getElementById("arrivalInfo");
+
 /* -----------------------------
    設定
 ----------------------------- */
@@ -163,7 +167,50 @@ if (earthquakes.length > 0) {
     showArrival(result, latest);
 
 }
-       
+
+        const savedHome = localStorage.getItem("homeLocation");
+
+if (savedHome && earthquakes.length > 0) {
+
+    const home = JSON.parse(savedHome);
+
+    const latest = earthquakes[0];
+
+    if (
+        latest.latitude != null &&
+        latest.longitude != null
+    ) {
+
+        const result = Arrival.calculate(
+            {
+                lat: latest.latitude,
+                lon: latest.longitude
+            },
+            home,
+            latest.time
+        );
+
+        arrivalInfo.innerHTML = `
+            <strong>📍震源</strong><br>
+            ${latest.hypocenter}<br><br>
+
+            <strong>📏距離</strong><br>
+            ${result.distance} km<br><br>
+
+            <strong>🌊P波</strong><br>
+            約 ${result.pTime} 秒<br><br>
+
+            <strong>🌊S波</strong><br>
+            約 ${result.sTime} 秒<br><br>
+
+            <strong>⏳あと</strong><br>
+            ${result.remaining} 秒
+        `;
+
+    }
+
+}
+        
        renderEarthquakes();
 
         lastUpdate.textContent =
