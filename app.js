@@ -10,7 +10,11 @@ Step 1
 
 const earthquakeList = document.getElementById("earthquakeList");
 const lastUpdate = document.getElementById("lastUpdate");
-
+// 例: 兵庫県姫路市（あとで設定画面で変更できる）
+const HOME = {
+    lat: 34.8151,
+    lon: 134.6853
+};
 /* -----------------------------
    設定
 ----------------------------- */
@@ -112,7 +116,25 @@ earthquakes = data.map(item => {
 
 });
 
-        renderEarthquakes();
+       // 最新地震の到達予測
+if (earthquakes.length > 0) {
+
+    const latest = earthquakes[0];
+
+    const result = Arrival.calculate(
+        {
+            lat: latest.latitude,
+            lon: latest.longitude
+        },
+        HOME,
+        latest.time
+    );
+
+    showArrival(result, latest);
+
+}
+       
+       renderEarthquakes();
 
         lastUpdate.textContent =
             new Date().toLocaleString("ja-JP");
@@ -351,5 +373,37 @@ function tsunamiToText(type) {
             return "不明";
 
     }
+
+}
+
+
+function showArrival(result, quake) {
+
+    const el = document.getElementById("arrivalInfo");
+
+    el.innerHTML = `
+        <div class="arrival-big">
+            <div>📍 ${quake.hypocenter}</div>
+            <div class="time">
+                ${result.remaining} 秒
+            </div>
+            <div>S波到達まで（推定）</div>
+        </div>
+
+        <div class="arrival-row">
+            <span>距離</span>
+            <strong>${result.distance} km</strong>
+        </div>
+
+        <div class="arrival-row">
+            <span>P波</span>
+            <strong>約 ${result.pTime} 秒</strong>
+        </div>
+
+        <div class="arrival-row">
+            <span>S波</span>
+            <strong>約 ${result.sTime} 秒</strong>
+        </div>
+    `;
 
 }
