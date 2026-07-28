@@ -29,13 +29,15 @@ const HOME = {
 const arrivalInfo =
     document.getElementById("arrivalInfo");
 
+let latestEarthquakeId = null;
+
 /* -----------------------------
    設定
 ----------------------------- */
 
 const CONFIG = {
     // 更新間隔（60秒）
-    UPDATE_INTERVAL: 60000,
+    UPDATE_INTERVAL: 5000,
 
     // 最大表示件数
     MAX_ITEMS: 20,
@@ -150,6 +152,21 @@ earthquakes = data.map(item => {
     };
 
 });
+
+        if (earthquakes.length > 0) {
+
+    const latest = earthquakes[0];
+
+    if (latest.id !== latestEarthquakeId) {
+
+        latestEarthquakeId = latest.id;
+
+        onNewEarthquake(latest);
+
+    }
+
+}
+        
 
        // 最新地震の到達予測
 if (earthquakes.length > 0) {
@@ -522,5 +539,13 @@ function saveHome(){
     );
 
     alert("保存しました！");
+
+}
+
+function onNewEarthquake(quake) {
+
+    console.log("新しい地震", quake);
+
+    japanMap.setEpicenter(quake);
 
 }
