@@ -223,6 +223,14 @@ if (savedHome && earthquakes.length > 0) {
     );
 
 }
+
+        if (earthquakes.length > 0) {
+
+    japanMap.setEpicenter(
+        earthquakes[0]
+    );
+
+}
         
        renderEarthquakes();
 
