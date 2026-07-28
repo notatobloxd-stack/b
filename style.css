@@ -156,3 +156,42 @@ footer {
     }
 
 }
+
+.arrival-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 25px;
+}
+
+.arrival-panel h2 {
+    color: var(--accent);
+    margin-bottom: 15px;
+}
+
+#arrivalInfo {
+    display: grid;
+    gap: 10px;
+}
+
+.arrival-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+}
+
+.arrival-big {
+    text-align: center;
+    padding: 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+}
+
+.arrival-big .time {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffd54f;
+}
