@@ -86,6 +86,7 @@ const data = await response.json();
 earthquakes = data.map(item => {
 
     const quake = item.earthquake;
+    const hypo = quake.hypocenter ?? {};
 
     return {
 
@@ -93,11 +94,15 @@ earthquakes = data.map(item => {
 
         time: quake.time,
 
-        hypocenter: quake.hypocenter?.name ?? "不明",
+        hypocenter: hypo.name ?? "不明",
 
-        magnitude: quake.hypocenter?.magnitude ?? "-",
+        latitude: hypo.latitude,
 
-        depth: quake.hypocenter?.depth ?? "-",
+        longitude: hypo.longitude,
+
+        magnitude: hypo.magnitude ?? "-",
+
+        depth: hypo.depth ?? "-",
 
         maxScale: quake.maxScale,
 
