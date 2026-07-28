@@ -22,6 +22,14 @@ class JapanMap {
         this.waveDistanceKm = 0;
         this.waveSpeed = 3.5;
         this.startTime = null;
+
+        this.epicenter = null;
+        this.quakeTime = null;
+
+        this.wave = {
+            pRadius: 0,
+            sRadius: 0
+        };
         
         window.addEventListener("resize", () => this.resize());
 
@@ -90,13 +98,13 @@ class JapanMap {
 
     animateWave() {
 
-    const now = performance.now();
+    const now = new Date();
 
-    const seconds =
-        (now - this.startTime) / 1000;
+    const elapsed =
+        (now - this.quakeTime) / 1000;
 
-    this.waveDistanceKm =
-        seconds * this.waveSpeed;
+    this.wave.pRadius = elapsed * 6;
+    this.wave.sRadius = elapsed * 3.5;
 
     this.draw();
 
@@ -140,7 +148,9 @@ class JapanMap {
 
         this.drawJapan();
 
-        this.drawWave();
+        this.drawPWave();
+
+        this.drawSWave();
 
         this.drawEpicenter();
 
