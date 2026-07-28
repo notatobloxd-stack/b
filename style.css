@@ -195,3 +195,48 @@ footer {
     font-weight: bold;
     color: #ffd54f;
 }
+
+.home-setting{
+    margin-top:20px;
+}
+
+.home-setting label{
+    display:block;
+    margin-bottom:10px;
+}
+
+.home-setting input{
+
+    width:100%;
+    padding:8px;
+
+    background:#111827;
+
+    color:white;
+
+    border:1px solid #334155;
+
+    border-radius:8px;
+
+    box-sizing:border-box;
+
+}
+
+.home-setting button{
+
+    width:100%;
+    margin-top:10px;
+
+    padding:10px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    background:#06b6d4;
+
+    color:white;
+
+}
