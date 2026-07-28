@@ -11,6 +11,15 @@ Step 1
 const earthquakeList = document.getElementById("earthquakeList");
 const lastUpdate = document.getElementById("lastUpdate");
 // 例: 兵庫県姫路市（あとで設定画面で変更できる）
+const homeLatInput =
+    document.getElementById("homeLat");
+
+const homeLonInput =
+    document.getElementById("homeLon");
+
+const saveHomeButton =
+    document.getElementById("saveHome");
+
 const HOME = {
     lat: 34.8151,
     lon: 134.6853
